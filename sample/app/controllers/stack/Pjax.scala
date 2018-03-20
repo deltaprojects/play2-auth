@@ -3,14 +3,14 @@ package controllers.stack
 import controllers.BaseAuthConfig
 import jp.t2v.lab.play2.auth.AuthElement
 import jp.t2v.lab.play2.stackc.{RequestAttributeKey, RequestWithAttributes, StackableController}
-import play.api.mvc.{Controller, Result}
+import play.api.mvc.{AbstractController, Result}
 import play.twirl.api.Html
 import views.html
 
 import scala.concurrent.Future
 
 trait Pjax extends StackableController with AuthElement {
-    self: Controller with BaseAuthConfig =>
+    self: AbstractController with BaseAuthConfig =>
 
   type Template = String => Html => Html
 

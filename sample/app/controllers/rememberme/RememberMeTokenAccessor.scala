@@ -3,7 +3,7 @@ package controllers.rememberme
 import jp.t2v.lab.play2.auth._
 import play.api.mvc.{Cookie, RequestHeader, Result}
 
-class RememberMeTokenAccessor(maxAge: Int) extends CookieTokenAccessor() {
+class RememberMeTokenAccessor(maxAge: Int) extends CookieTokenAccessor(secretKey="ZSn5z9l]1dhRTKM[iBjc_YJQlRH:M<RoFz5ZQ<]foaETnzb]QMn2lU6mK?8xxGGQ") {
 
   override def put(token: AuthenticityToken)(result: Result)(implicit request: RequestHeader): Result = {
     val remember = request.tags.get("rememberme").exists("true" ==) || request.session.get("rememberme").exists("true" ==)

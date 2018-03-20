@@ -1,17 +1,16 @@
 package jp.t2v.lab.play2.auth
 
-import play.api.cache.{ Cache, CacheApi }
-import play.api.Play._
-
-import scala.annotation.tailrec
-import scala.util.Random
 import java.security.SecureRandom
 import java.util.concurrent.TimeUnit
 
+import play.api.cache._
+
+import scala.annotation.tailrec
 import scala.concurrent.duration.Duration
 import scala.reflect.ClassTag
+import scala.util.Random
 
-class CacheIdContainer[Id: ClassTag] (cacheApi: CacheApi) extends IdContainer[Id] {
+class CacheIdContainer[Id: ClassTag] (cacheApi: SyncCacheApi) extends IdContainer[Id] {
 
   private[auth] val tokenSuffix = ":token"
   private[auth] val userIdSuffix = ":userId"

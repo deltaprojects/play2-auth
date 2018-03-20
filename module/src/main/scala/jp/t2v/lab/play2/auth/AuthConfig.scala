@@ -1,11 +1,10 @@
 package jp.t2v.lab.play2.auth
 
-import play.api.{ Environment, Mode }
-import play.api.cache.CacheApi
 import play.api.mvc._
+import play.api.{Environment, Mode}
 
-import scala.reflect.{ ClassTag, classTag }
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
+import scala.reflect.ClassTag
 
 trait AuthConfig {
 
@@ -52,14 +51,5 @@ trait AuthConfig {
 
   @deprecated("it will be deleted since 0.14.0. use CookieTokenAccessor constructor", since = "0.13.1")
   final lazy val isTransientCookie: Boolean = throw new AssertionError("use tokenAccessor setting instead.")
-
-  lazy val tokenAccessor: TokenAccessor = new CookieTokenAccessor(
-    cookieName = "PLAY2AUTH_SESS_ID",
-    cookieSecureOption = environment.mode == Mode.Prod,
-    cookieHttpOnlyOption = true,
-    cookieDomainOption = None,
-    cookiePathOption = "/",
-    cookieMaxAge = Some(sessionTimeoutInSeconds)
-  )
 
 }

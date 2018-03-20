@@ -34,6 +34,6 @@ trait AuthConfigImpl extends AuthConfig {
 
   override lazy val idContainer = new BasicAuthIdContainer
 
-  override lazy val tokenAccessor = new BasicAuthTokenAccessor
+  lazy val tokenAccessor = new BasicAuthTokenAccessor
 
 }

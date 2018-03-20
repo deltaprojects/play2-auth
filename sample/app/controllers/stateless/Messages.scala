@@ -1,15 +1,15 @@
 package controllers.stateless
 
-import javax.inject.Inject
-
 import controllers.stack.Pjax
-import jp.t2v.lab.play2.auth.AuthElement
-import play.api.mvc.Controller
-import views.html
+import javax.inject.Inject
 import jp.t2v.lab.play2.auth.sample.Role._
+import jp.t2v.lab.play2.auth.{AuthElement, CookieTokenAccessor}
 import play.api.Environment
+import play.api.mvc.{AbstractController, ControllerComponents}
+import views.html
 
-class Messages @Inject() (val environment: Environment) extends Controller with Pjax with AuthElement with AuthConfigImpl {
+class Messages @Inject() (val environment: Environment, controllerComponents: ControllerComponents) extends AbstractController(controllerComponents) with Pjax with AuthElement with AuthConfigImpl {
+  def tokenAccessor = new CookieTokenAccessor(secretKey="ZSn5z9l]1dhRTKM[iBjc_YJQlRH:M<RoFz5ZQ<]foaETnzb]QMn2lU6mK?8xxGGQ")
 
   def main = StackAction(AuthorityKey -> NormalUser) { implicit request =>
     val title = "message main"

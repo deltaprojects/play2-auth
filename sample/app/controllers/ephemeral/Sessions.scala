@@ -1,19 +1,27 @@
 package controllers.ephemeral
 
 import javax.inject.Inject
-
-import jp.t2v.lab.play2.auth.LoginLogout
 import jp.t2v.lab.play2.auth.sample.Account
+import jp.t2v.lab.play2.auth.{CookieTokenAccessor, LoginLogout, TokenAccessor}
+import play.Mode
 import play.api.Environment
 import play.api.data.Form
 import play.api.data.Forms._
-import play.api.mvc.{ Action, Controller }
+import play.api.mvc.{AbstractController, ControllerComponents}
 import views.html
 
-import scala.concurrent.Future
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import scala.concurrent.{ExecutionContext, Future}
 
-class Sessions @Inject() (val environment: Environment) extends Controller with LoginLogout with AuthConfigImpl {
+class Sessions @Inject() (val environment: Environment, controllerComponents: ControllerComponents)(implicit ec: ExecutionContext) extends AbstractController(controllerComponents) with LoginLogout with AuthConfigImpl {
+  lazy val tokenAccessor: TokenAccessor = new CookieTokenAccessor(
+                                                                   cookieName = "PLAY2AUTH_SESS_ID",
+                                                                   cookieSecureOption = environment.mode.asJava == Mode.PROD,
+                                                                   cookieHttpOnlyOption = true,
+                                                                   cookieDomainOption = None,
+                                                                   cookiePathOption = "/",
+                                                                   cookieMaxAge = None,
+                                                                   secretKey="ZSn5z9l]1dhRTKM[iBjc_YJQlRH:M<RoFz5ZQ<]foaETnzb]QMn2lU6mK?8xxGGQ"
+                                                                 )
 
   val loginForm = Form {
     mapping("email" -> email, "password" -> text)(Account.authenticate)(_.map(u => (u.email, "")))

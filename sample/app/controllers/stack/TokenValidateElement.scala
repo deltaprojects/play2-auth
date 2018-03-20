@@ -1,15 +1,17 @@
 package controllers.stack
 
-import jp.t2v.lab.play2.stackc.{RequestAttributeKey, RequestWithAttributes, StackableController}
-import scala.concurrent.Future
-import play.api.mvc.{Result, Request, Controller}
-import play.api.data._
-import play.api.data.Forms._
-import scala.util.Random
 import java.security.SecureRandom
 
+import jp.t2v.lab.play2.stackc.{RequestAttributeKey, RequestWithAttributes, StackableController}
+import play.api.data.Forms._
+import play.api.data._
+import play.api.mvc.{AbstractController, Request, Result}
+
+import scala.concurrent.Future
+import scala.util.Random
+
 trait TokenValidateElement extends StackableController {
-    self: Controller =>
+    self: AbstractController =>
 
   private val PreventingCsrfTokenSessionKey = "preventingCsrfToken"
 

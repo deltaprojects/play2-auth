@@ -1,20 +1,27 @@
 package controllers.builder
 
 import javax.inject.Inject
-
-import jp.t2v.lab.play2.auth.LoginLogout
 import jp.t2v.lab.play2.auth.sample.Account
+import jp.t2v.lab.play2.auth.sample.Role.{Administrator, NormalUser}
+import jp.t2v.lab.play2.auth.{CookieTokenAccessor, LoginLogout}
 import play.api.Environment
 import play.api.data.Form
 import play.api.data.Forms._
-import play.api.mvc.{ Action, Controller }
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import play.api.mvc.{AbstractController, ControllerComponents}
 import views.html
 
 import scala.concurrent.Future
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
 
-class Sessions @Inject() (val environment: Environment) extends Controller with LoginLogout with AuthConfigImpl {
-
+class Sessions @Inject() (val environment: Environment, controllerComponents: ControllerComponents) extends AbstractController(controllerComponents) with LoginLogout with AuthConfigImpl {
+  if (Account.findAll.isEmpty) {
+    Seq(
+         Account(1, "alice@example.com", "secret", "Alice", Administrator),
+         Account(2, "bob@example.com",   "secret", "Bob",   NormalUser),
+         Account(3, "chris@example.com", "secret", "Chris", NormalUser)
+       ) foreach Account.create
+  }
+  def tokenAccessor = new CookieTokenAccessor(secretKey="ZSn5z9l]1dhRTKM[iBjc_YJQlRH:M<RoFz5ZQ<]foaETnzb]QMn2lU6mK?8xxGGQ")
   val loginForm = Form {
     mapping("email" -> email, "password" -> text)(Account.authenticate)(_.map(u => (u.email, "")))
       .verifying("Invalid email or password", result => result.isDefined)

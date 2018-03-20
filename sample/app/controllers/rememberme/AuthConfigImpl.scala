@@ -14,6 +14,6 @@ trait AuthConfigImpl extends BaseAuthConfig {
 
   def authenticationFailed(request: RequestHeader)(implicit ctx: ExecutionContext) = Future.successful(Redirect(routes.Sessions.login))
 
-  override lazy val tokenAccessor = new RememberMeTokenAccessor(sessionTimeoutInSeconds)
+  lazy val tokenAccessor = new RememberMeTokenAccessor(sessionTimeoutInSeconds)
 
 }

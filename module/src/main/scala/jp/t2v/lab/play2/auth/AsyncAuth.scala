@@ -6,7 +6,8 @@ import play.api.mvc._
 import scala.concurrent.{ ExecutionContext, Future }
 
 trait AsyncAuth {
-    self: AuthConfig with Controller =>
+    self: AuthConfig with AbstractController =>
+  def tokenAccessor: TokenAccessor
 
   def authorized(authority: Authority)(implicit request: RequestHeader, context: ExecutionContext): Future[Either[Result, (User, ResultUpdater)]] = {
     restoreUser collect {

@@ -1,17 +1,22 @@
 package controllers.basic
 
 import javax.inject.Inject
-
-import controllers.stack.Pjax
 import jp.t2v.lab.play2.auth.AuthElement
-import play.api.mvc.Controller
-import views.html
+import jp.t2v.lab.play2.auth.sample.Account
 import jp.t2v.lab.play2.auth.sample.Role._
 import play.api.Environment
+import play.api.mvc.{AbstractController, ControllerComponents}
 import play.twirl.api.Html
+import views.html
 
-class Messages @Inject() (val environment: Environment) extends Controller with AuthElement with AuthConfigImpl {
-
+class Messages @Inject() (val environment: Environment, controllerComponents: ControllerComponents) extends AbstractController(controllerComponents) with AuthElement with AuthConfigImpl {
+  if (Account.findAll.isEmpty) {
+    Seq(
+         Account(1, "alice@example.com", "secret", "Alice", Administrator),
+         Account(2, "bob@example.com",   "secret", "Bob",   NormalUser),
+         Account(3, "chris@example.com", "secret", "Chris", NormalUser)
+       ) foreach Account.create
+  }
   def main = StackAction(AuthorityKey -> NormalUser) { implicit request =>
     val title = "message main"
     Ok(html.message.main(title))
