@@ -8,7 +8,7 @@ val appName    = "play2-auth"
 val playVersion = play.core.PlayVersion.current
 
 lazy val baseSettings = Seq(
-  version            := "0.16.1",
+  version            := "0.16.2",
   scalaVersion       := "2.11.11",
   crossScalaVersions := Seq("2.11.11", "2.12.3"),
   organization       := "jp.t2v",
@@ -49,15 +49,16 @@ lazy val appPomExtra = {
 lazy val core = (project in file("module"))
   .settings(
     baseSettings,
+    resolvers += "Delta Projects" at "http://mavenrepo.service.delta.prod/artifactory/libs-releases-local",
     libraryDependencies += "com.typesafe.play"  %%   "play"                   % playVersion        % "provided",
     libraryDependencies += "com.typesafe.play"  %%   "play-cache"             % playVersion        % "provided",
-    libraryDependencies += "jp.t2v"             %%   "stackable-controller"   % "0.7.0",
+    libraryDependencies += "jp.t2v"             %%   "stackable-controller"   % "0.7.4",
     name                    := appName,
     publishMavenStyle       := appPublishMavenStyle,
     publishArtifact in Test := appPublishArtifactInTest,
     pomIncludeRepository    := appPomIncludeRepository,
     publishTo               := Some("Delta projects" at "http://mavenrepo.service.delta.prod/artifactory/libs-releases-local"),
-    credentials       += Credentials(Path.userHome / ".sbt" / "credentials"),
+    credentials       += Credentials(Path.userHome / ".sbt" / ".credentials"),
     pomExtra                := appPomExtra
   )
 
@@ -70,7 +71,7 @@ lazy val test = (project in file("test"))
     publishArtifact in Test := appPublishArtifactInTest,
     pomIncludeRepository    := appPomIncludeRepository,
     publishTo               := Some("Delta projects" at "http://mavenrepo.service.delta.prod/artifactory/libs-releases-local"),
-    credentials       += Credentials(Path.userHome / ".sbt" / "credentials"),
+    credentials       += Credentials(Path.userHome / ".sbt" / ".credentials"),
     pomExtra                := appPomExtra
   ).dependsOn(core)
 
@@ -104,7 +105,7 @@ lazy val sample = (project in file("sample"))
     publishArtifact   := false,
     packagedArtifacts := Map.empty,
     publishTo         := Some("Delta projects" at "http://mavenrepo.service.delta.prod/artifactory/libs-releases-local"),
-    credentials       += Credentials(Path.userHome / ".sbt" / "credentials"),
+    credentials       += Credentials(Path.userHome / ".sbt" / ".credentials"),
     pomExtra          := appPomExtra
   )
   .dependsOn(core, test % "test")
@@ -157,7 +158,7 @@ lazy val root = (project in file("."))
     publishArtifact   := false,
     packagedArtifacts := Map.empty,
     publishTo               := Some("Delta projects" at "http://mavenrepo.service.delta.prod/artifactory/libs-releases-local"),
-    credentials       += Credentials(Path.userHome / ".sbt" / "credentials"),
+    credentials       += Credentials(Path.userHome / ".sbt" / ".credentials"),
     pomExtra          := appPomExtra
   ).aggregate(core, test, sample/*, social, socialSample*/)
 
